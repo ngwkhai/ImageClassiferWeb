@@ -38,35 +38,39 @@ def load_data():
 
     return (x_train, y_train), (x_test, y_test)
 
-# Load dữ liệu
-(x_train, y_train), (x_test, y_test) = load_data()
+def main():
+    # Load dữ liệu
+    (x_train, y_train), (x_test, y_test) = load_data()
 
-# Chuẩn hoá dữ liệu
-x_train = x_train.astype('float32') / 255.0
-x_test = x_test.astype('float32') / 255.0
+    # Chuẩn hoá dữ liệu
+    x_train = x_train.astype('float32') / 255.0
+    x_test = x_test.astype('float32') / 255.0
 
-# Chuyển đổi thành one-hot encoding
-y_train = to_categorical(y_train, 10)
-y_test = to_categorical(y_test, 10)
+    # Chuyển đổi thành one-hot encoding
+    y_train = to_categorical(y_train, 10)
+    y_test = to_categorical(y_test, 10)
 
-# Xây dựng mô hình CNN
-model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)),
-    MaxPooling2D((2, 2)),
-    Conv2D(64, (3, 3), activation='relu'),
-    MaxPooling2D((2, 2)),
-    Conv2D(128, (3, 3), activation='relu'),
-    Flatten(),
-    Dense(128, activation='relu'),
-    Dropout(0.5),
-    Dense(10, activation='softmax')
-])
+    # Xây dựng mô hình CNN
+    model = Sequential([
+        Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)),
+        MaxPooling2D((2, 2)),
+        Conv2D(64, (3, 3), activation='relu'),
+        MaxPooling2D((2, 2)),
+        Conv2D(128, (3, 3), activation='relu'),
+        Flatten(),
+        Dense(128, activation='relu'),
+        Dropout(0.5),
+        Dense(10, activation='softmax')
+    ])
 
-# Biên dịch mô hình
-model.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
+    # Biên dịch mô hình
+    model.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
 
-# Huấn luyện mô hình
-model.fit(x_train, y_train, epochs=10, batch_size=64, validation_data=(x_test, y_test))
+    # Huấn luyện mô hình
+    model.fit(x_train, y_train, epochs=10, batch_size=64, validation_data=(x_test, y_test))
 
-# Lưu trữ mô hình đã huấn luyện
-model.save('model/cifar10_model')
+    # Lưu trữ mô hình đã huấn luyện
+    model.save('models/cifar10_model.h5')
+
+if __name__ == "__main__":
+    main()
